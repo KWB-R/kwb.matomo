@@ -17,4 +17,61 @@ knitr::opts_chunk$set(
 ```{r setup, eval=FALSE}
 library(kwb.matomo)
 page_urls <- kwb.matomo::get_pageurls()
+
+page_urls$type <- ifelse(grepl(pattern = "/index$|\\?.*$|htm$|html$|pdf$", page_urls$url),
+                         "file",
+                         "directory")
+  
+
+reformat_pageurls_info <- function (page_urls)  {
+
+  file_info <- page_urls[!is.na(page_urls$url),] %>%  
+    dplyr::as_data_frame() %>% 
+    dplyr::select(.data$url, .data$nb_visits) %>% 
+    dplyr::rename(path = .data$url, 
+                  size = .data$nb_visits) %>% 
+    dplyr::mutate(
+      path = stringr::str_remove(.data$path, pattern = "^https://|^http://")) %>%
+    dplyr::mutate(
+      path = stringr::str_remove(.data$path, pattern = "^www\\."))  
+  
+  file_info$type <- ifelse(grepl(pattern = "/index$|\\?.*$|htm$|html$|pdf$",
+                           file_info$path),
+                           "file",
+                           "directory")
+
+  file_info$size <- kwb.utils::defaultIfNA(file_info$size, 
+                                           0)
+  
+  file_info <- file_info %>%  dplyr::group_by(.data$path, .data$type) %>% dplyr::summarise(size = sum(.data$size))
+  
+  kwb.utils::moveColumnsToFront(file_info, c("path", 
+                                             "type", "size"))
+}
+
+normalise_pageurls_info <- function (page_urls) 
+{
+
+    file_info <- kwb.utils::catAndRun("Reformatting the file info table", 
+                                      {
+                                        reformat_pageurls_info(page_urls)
+                                      })
+
+
+  structure(file_info, units = list(size = "Number of visits"))
+}
+
+paths <- page_urls[page_urls$type == "directory",]
+
+fakin.path.app::plot_path_network(paths = paths$label,
+                                  remove_common_root = FALSE,
+                                  max_depth = 3, 
+                                  weight_by = size,
+                                  sizes = paths$sum_time_spent)
+
+
+fakin.path.app::plot_treemaps_from_path_data(path_data = normalise_pageurls_info(page_urls), 
+                                             root_path = "kompetenz-wasser.de/",
+                                             n_levels = 2)
+
 ```
