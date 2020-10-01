@@ -93,65 +93,64 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/KWB-R/kwb.matomo">kwb.matomo</a></span>)
-<span class="kw">page_urls</span> <span class="op">&lt;-</span> <span class="kw">kwb.matomo</span>::<span class="fu"><a href="../reference/get_pageurls.html">get_pageurls</a></span>()
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KWB-R/kwb.matomo">kwb.matomo</a></span><span class="op">)</span>
+<span class="va">page_urls</span> <span class="op">&lt;-</span> <span class="fu">kwb.matomo</span><span class="fu">::</span><span class="fu"><a href="../reference/get_pageurls.html">get_pageurls</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="kw">page_urls</span><span class="op">$</span><span class="kw">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(pattern = <span class="st">"/index$|\\?.*$|htm$|html$|pdf$"</span>, <span class="kw">page_urls</span><span class="op">$</span><span class="kw">url</span>),
+<span class="va">page_urls</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"/index$|\\?.*$|htm$|html$|pdf$"</span>, <span class="va">page_urls</span><span class="op">$</span><span class="va">url</span><span class="op">)</span>,
                          <span class="st">"file"</span>,
-                         <span class="st">"directory"</span>)
+                         <span class="st">"directory"</span><span class="op">)</span>
   
 
-<span class="kw">reformat_pageurls_info</span> <span class="op">&lt;-</span> <span class="fu">function</span> (<span class="kw">page_urls</span>)  {
+<span class="va">reformat_pageurls_info</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">page_urls</span><span class="op">)</span>  <span class="op">{</span>
 
-  <span class="kw">file_info</span> <span class="op">&lt;-</span> <span class="kw">page_urls</span>[<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="kw">page_urls</span><span class="op">$</span><span class="kw">url</span>),] <span class="op">%&gt;%</span>  
-    <span class="kw">dplyr</span>::<span class="fu">as_data_frame</span>() <span class="op">%&gt;%</span> 
-    <span class="kw">dplyr</span>::<span class="fu">select</span>(<span class="kw">.data</span><span class="op">$</span><span class="kw">url</span>, <span class="kw">.data</span><span class="op">$</span><span class="kw">nb_visits</span>) <span class="op">%&gt;%</span> 
-    <span class="kw">dplyr</span>::<span class="fu">rename</span>(path = <span class="kw">.data</span><span class="op">$</span><span class="kw">url</span>, 
-                  size = <span class="kw">.data</span><span class="op">$</span><span class="kw">nb_visits</span>) <span class="op">%&gt;%</span> 
-    <span class="kw">dplyr</span>::<span class="fu">mutate</span>(
-      path = <span class="kw">stringr</span>::<span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span>(<span class="kw">.data</span><span class="op">$</span><span class="kw">path</span>, pattern = <span class="st">"^https://|^http://"</span>)) <span class="op">%&gt;%</span>
-    <span class="kw">dplyr</span>::<span class="fu">mutate</span>(
-      path = <span class="kw">stringr</span>::<span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span>(<span class="kw">.data</span><span class="op">$</span><span class="kw">path</span>, pattern = <span class="st">"^www\\."</span>))  
+  <span class="va">file_info</span> <span class="op">&lt;-</span> <span class="va">page_urls</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">page_urls</span><span class="op">$</span><span class="va">url</span><span class="op">)</span>,<span class="op">]</span> <span class="op">%&gt;%</span>  
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">as_data_frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">url</span>, <span class="va">.data</span><span class="op">$</span><span class="va">nb_visits</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">rename</span><span class="op">(</span>path <span class="op">=</span> <span class="va">.data</span><span class="op">$</span><span class="va">url</span>, 
+                  size <span class="op">=</span> <span class="va">.data</span><span class="op">$</span><span class="va">nb_visits</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>
+      path <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">path</span>, pattern <span class="op">=</span> <span class="st">"^https://|^http://"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>
+      path <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">path</span>, pattern <span class="op">=</span> <span class="st">"^www\\."</span><span class="op">)</span><span class="op">)</span>  
   
-  <span class="kw">file_info</span><span class="op">$</span><span class="kw">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(pattern = <span class="st">"/index$|\\?.*$|htm$|html$|pdf$"</span>,
-                           <span class="kw">file_info</span><span class="op">$</span><span class="kw">path</span>),
+  <span class="va">file_info</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"/index$|\\?.*$|htm$|html$|pdf$"</span>,
+                           <span class="va">file_info</span><span class="op">$</span><span class="va">path</span><span class="op">)</span>,
                            <span class="st">"file"</span>,
-                           <span class="st">"directory"</span>)
+                           <span class="st">"directory"</span><span class="op">)</span>
 
-  <span class="kw">file_info</span><span class="op">$</span><span class="kw">size</span> <span class="op">&lt;-</span> <span class="kw">kwb.utils</span>::<span class="fu">defaultIfNA</span>(<span class="kw">file_info</span><span class="op">$</span><span class="kw">size</span>, 
-                                           <span class="fl">0</span>)
+  <span class="va">file_info</span><span class="op">$</span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu">kwb.utils</span><span class="fu">::</span><span class="fu">defaultIfNA</span><span class="op">(</span><span class="va">file_info</span><span class="op">$</span><span class="va">size</span>, 
+                                           <span class="fl">0</span><span class="op">)</span>
   
-  <span class="kw">file_info</span> <span class="op">&lt;-</span> <span class="kw">file_info</span> <span class="op">%&gt;%</span>  <span class="kw">dplyr</span>::<span class="fu">group_by</span>(<span class="kw">.data</span><span class="op">$</span><span class="kw">path</span>, <span class="kw">.data</span><span class="op">$</span><span class="kw">type</span>) <span class="op">%&gt;%</span> <span class="kw">dplyr</span>::<span class="fu">summarise</span>(size = <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw">.data</span><span class="op">$</span><span class="kw">size</span>))
+  <span class="va">file_info</span> <span class="op">&lt;-</span> <span class="va">file_info</span> <span class="op">%&gt;%</span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">path</span>, <span class="va">.data</span><span class="op">$</span><span class="va">type</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">summarise</span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">size</span><span class="op">)</span><span class="op">)</span>
   
-  <span class="kw">kwb.utils</span>::<span class="fu">moveColumnsToFront</span>(<span class="kw">file_info</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"path"</span>, 
-                                             <span class="st">"type"</span>, <span class="st">"size"</span>))
-}
+  <span class="fu">kwb.utils</span><span class="fu">::</span><span class="fu">moveColumnsToFront</span><span class="op">(</span><span class="va">file_info</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"path"</span>, 
+                                             <span class="st">"type"</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">normalise_pageurls_info</span> <span class="op">&lt;-</span> <span class="fu">function</span> (<span class="kw">page_urls</span>) 
-{
+<span class="va">normalise_pageurls_info</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">page_urls</span><span class="op">)</span> 
+<span class="op">{</span>
 
-    <span class="kw">file_info</span> <span class="op">&lt;-</span> <span class="kw">kwb.utils</span>::<span class="fu">catAndRun</span>(<span class="st">"Reformatting the file info table"</span>, 
-                                      {
-                                        <span class="fu">reformat_pageurls_info</span>(<span class="kw">page_urls</span>)
-                                      })
-
-
-  <span class="fu"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(<span class="kw">file_info</span>, units = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(size = <span class="st">"Number of visits"</span>))
-}
-
-<span class="kw">paths</span> <span class="op">&lt;-</span> <span class="kw">page_urls</span>[<span class="kw">page_urls</span><span class="op">$</span><span class="kw">type</span> <span class="op">==</span> <span class="st">"directory"</span>,]
-
-<span class="kw">fakin.path.app</span>::<span class="fu">plot_path_network</span>(paths = <span class="kw">paths</span><span class="op">$</span><span class="kw">label</span>,
-                                  remove_common_root = <span class="fl">FALSE</span>,
-                                  max_depth = <span class="fl">3</span>, 
-                                  weight_by = <span class="kw">size</span>,
-                                  sizes = <span class="kw">paths</span><span class="op">$</span><span class="kw">sum_time_spent</span>)
+    <span class="va">file_info</span> <span class="op">&lt;-</span> <span class="fu">kwb.utils</span><span class="fu">::</span><span class="fu">catAndRun</span><span class="op">(</span><span class="st">"Reformatting the file info table"</span>, 
+                                      <span class="op">{</span>
+                                        <span class="fu">reformat_pageurls_info</span><span class="op">(</span><span class="va">page_urls</span><span class="op">)</span>
+                                      <span class="op">}</span><span class="op">)</span>
 
 
-<span class="kw">fakin.path.app</span>::<span class="fu">plot_treemaps_from_path_data</span>(path_data = <span class="fu">normalise_pageurls_info</span>(<span class="kw">page_urls</span>), 
-                                             root_path = <span class="st">"kompetenz-wasser.de/"</span>,
-                                             n_levels = <span class="fl">2</span>)
-</pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/base/structure.html">structure</a></span><span class="op">(</span><span class="va">file_info</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="st">"Number of visits"</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">paths</span> <span class="op">&lt;-</span> <span class="va">page_urls</span><span class="op">[</span><span class="va">page_urls</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="st">"directory"</span>,<span class="op">]</span>
+
+<span class="fu">fakin.path.app</span><span class="fu">::</span><span class="fu">plot_path_network</span><span class="op">(</span>paths <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">label</span>,
+                                  remove_common_root <span class="op">=</span> <span class="cn">FALSE</span>,
+                                  max_depth <span class="op">=</span> <span class="fl">3</span>, 
+                                  weight_by <span class="op">=</span> <span class="va">size</span>,
+                                  sizes <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">sum_time_spent</span><span class="op">)</span>
+
+
+<span class="fu">fakin.path.app</span><span class="fu">::</span><span class="fu">plot_treemaps_from_path_data</span><span class="op">(</span>path_data <span class="op">=</span> <span class="fu">normalise_pageurls_info</span><span class="op">(</span><span class="va">page_urls</span><span class="op">)</span>, 
+                                             root_path <span class="op">=</span> <span class="st">"kompetenz-wasser.de/"</span>,
+                                             n_levels <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
